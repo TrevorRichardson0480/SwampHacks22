@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import { Appbar, Button, Avatar } from 'react-native-paper';
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -9,12 +9,22 @@ const MyComponent = () => {
   const _handleSearch = () => console.log('Searching');
   const _handleMore = () => console.log('Shown more');
 
-  //const [bodyContent, setContent] = useState("Say something...");
+  const [bodyContent, setContent] = useState("Say something...");
 
-  //const onPressMic = () => {
-  //  if (bodyContent.localeCompare("Say something...") == 0)
-    //setContent("Listening...");
-//  };
+  const onPressMic = () => {
+    if (bodyContent.localeCompare("Listening...") == 1) {
+      // enter a listening state
+      setContent("Listening...");
+      // start listening
+
+    } else {
+      // enter a processing state
+      setContent("Wait...");
+      // stop listening
+      // ...
+      // setContent(content);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -24,12 +34,13 @@ const MyComponent = () => {
       </Appbar.Header>
 
       <View style={styles.body}>
-        <Text style={styles.bodyText}>bodyContent</Text>
+        <Text style={styles.bodyText}>{bodyContent}</Text>
       </View>
 
       <View style={styles.buttonContent}>
-        <TouchableOpacity style={styles.button}>
-          <Avatar.Icon style={styles.buttonIcon} size={100} icon="microphone" />
+        <TouchableOpacity style={styles.button} onPress={onPressMic}>
+          <Avatar.Icon style={(bodyContent.localeCompare("Listening...") == 0) ? styles.buttonIconRecording : styles.hidden} size={130} icon="microphone" />
+          <Avatar.Icon style={(bodyContent.localeCompare("Listening...") == 0) ? styles.hidden : styles.buttonIcon} size={100} icon="microphone" />
         </TouchableOpacity>
       </View>
 
@@ -63,14 +74,20 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#4F8C91',
-    height: 100,
-    width: 100,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonIcon: {
     backgroundColor: '#444444',
-  }
+  },
+  buttonIconRecording: {
+    backgroundColor: '#444444',
+    borderWidth: 15,
+    borderColor: '#A30000',
+  },
+  hidden: {
+    display: 'none',
+  },
 });
 
 export default MyComponent;
