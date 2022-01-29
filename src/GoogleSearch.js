@@ -14,36 +14,25 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import Button from 'react-bootstrap/Button';
-import { getCredential } from './CredentialLoader';
 
-export function GoogleSearch() {
+export function GoogleSearch(props) {
     const [loaded, setLoaded] = useState(false);
-    let CLIENT_ID = null;
-    let API_KEY = null;
-    let CX = null;
-
+    
     useEffect(() => {
-        getCredential("google-credentials.json", "api-key").then((k) => {
-            API_KEY = k;
-        });
-        getCredential("google-credentials.json", "google-search-client-id").then((k) => {
-            CLIENT_ID = k;
-        });
-        getCredential("google-credentials.json", "cx").then((k) => {
-            CX = k;
-        });
-        loadGAPI(() => {
-            setLoaded(true);
-            console.log("GAPI loaded");
-            handleClientLoad();
-        });
+      loadGAPI(() => {
+        setLoaded(true);
+        console.log("GAPI loaded");
+        handleClientLoad();
+      });
     });
-
+  
 
     const [authorized, setAuthorized] = React.useState(false);
 
     // Client ID and API key from the Developer Console
     // const CLIENT_ID = '352950743618-as40op9vf6rih4v3qbts99o4aaer82q2.apps.googleusercontent.com';
+    const CLIENT_ID = '352950743618-ubtd7o0i8kfms6gjuj34mbj77u79241p.apps.googleusercontent.com';
+    const API_KEY = 'AIzaSyAZZmaHv8HoXI-e6JLfIUuOwaVtOc1JjrM';
     // var CLIENT_ID = credentials["google-search-client-id"];
     // var API_KEY = credentials["google-search-api-key"];
 
@@ -61,8 +50,6 @@ export function GoogleSearch() {
      *  On load, called to load the auth2 library and API client library.
      */
     const handleClientLoad = () => {
-        if (CLIENT_ID == null || API_KEY == null || CX == null)
-            console.log("CREDENTIALS WERE NULL!!!!");
         console.log("handleClientLoad called");
         console.log(gapi);
         gapi.load('client:auth2', initClient);
@@ -144,7 +131,7 @@ export function GoogleSearch() {
      */
     const performGoogleSearch = (queryString) => {
         return window.gapi.client.search.cse.list({
-            "cx": CX,
+            "cx": "0dfb04d39744dc5c1",
             "q": queryString
         })
             .then(function (response) {
@@ -166,16 +153,16 @@ export function GoogleSearch() {
     const loadGAPI = (callback) => {
         const existingScript = document.getElementById('gapi-script');
         if (!existingScript) {
-            const script = document.createElement('script');
-            script.src = 'https://apis.google.com/js/api.js';
-            script.id = 'gapi-script';
-            document.body.appendChild(script);
-            script.onload = () => {
-                if (callback) callback();
-            };
+          const script = document.createElement('script');
+          script.src = 'https://apis.google.com/js/api.js';
+          script.id = 'gapi-script';
+          document.body.appendChild(script);
+          script.onload = () => { 
+            if (callback) callback();
+          };
         }
         if (existingScript && callback) callback();
-    };
+      };
 
     return (
         <div id="content">
