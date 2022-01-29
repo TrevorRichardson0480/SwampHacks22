@@ -7,6 +7,7 @@ import Home from "./Home.js"
 export default function App() {
   return (
       <View style={styles.container}>
+        <Text>Testing test test</Text>
         <Home>
         </Home>
       </View>
