@@ -8,7 +8,7 @@
          })
          .then(stream => {
              const mediaRecorder = new MediaRecorder(stream);
-             mediaRecorder.start();
+             mediaRecorder.start(100);
 
              // we will need to store the audio continuously 
              const userQuestion = [];
@@ -16,6 +16,7 @@
              mediaRecorder.addEventListener("dataavailable", event => {
                  userQuestion.push(event.data);
              });
+
              // after we stop lets store the chunks in a blob
              // create a url out of the blob 
              // play it back to the user 
