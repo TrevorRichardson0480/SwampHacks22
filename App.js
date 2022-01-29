@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import { Appbar, Button, Avatar } from 'react-native-paper';
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -9,12 +9,15 @@ const MyComponent = () => {
   const _handleSearch = () => console.log('Searching');
   const _handleMore = () => console.log('Shown more');
 
-  //const [bodyContent, setContent] = useState("Say something...");
+  const [bodyContent, setContent] = useState("Say something...");
 
-  //const onPressMic = () => {
-  //  if (bodyContent.localeCompare("Say something...") == 0)
-    //setContent("Listening...");
-//  };
+  const onPressMic = () => {
+    if (bodyContent.localeCompare("Say something...") == 0 || bodyContent.localeCompare("Wait...") == 0) {
+      setContent("Listening...");
+    } else {
+      setContent("Wait...");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -24,11 +27,11 @@ const MyComponent = () => {
       </Appbar.Header>
 
       <View style={styles.body}>
-        <Text style={styles.bodyText}>bodyContent</Text>
+        <Text style={styles.bodyText}>{bodyContent}</Text>
       </View>
 
       <View style={styles.buttonContent}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={onPressMic}>
           <Avatar.Icon style={styles.buttonIcon} size={100} icon="microphone" />
         </TouchableOpacity>
       </View>
@@ -70,6 +73,9 @@ const styles = StyleSheet.create({
   },
   buttonIcon: {
     backgroundColor: '#444444',
+    borderWidth: 5,
+    boarderRadium: 110,
+    borderColor: '#A30000',
   }
 });
 
