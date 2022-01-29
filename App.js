@@ -12,10 +12,17 @@ const MyComponent = () => {
   const [bodyContent, setContent] = useState("Say something...");
 
   const onPressMic = () => {
-    if (bodyContent.localeCompare("Say something...") == 0 || bodyContent.localeCompare("Wait...") == 0) {
+    if (bodyContent.localeCompare("Listening...") == 1) {
+      // enter a listening state
       setContent("Listening...");
+      // start listening
+
     } else {
+      // enter a processing state
       setContent("Wait...");
+      // stop listening
+      // ...
+      // setContent(content);
     }
   };
 
@@ -32,7 +39,8 @@ const MyComponent = () => {
 
       <View style={styles.buttonContent}>
         <TouchableOpacity style={styles.button} onPress={onPressMic}>
-          <Avatar.Icon style={styles.buttonIcon} size={100} icon="microphone" />
+          <Avatar.Icon style={(bodyContent.localeCompare("Listening...") == 0) ? styles.buttonIconRecording : styles.hidden} size={130} icon="microphone" />
+          <Avatar.Icon style={(bodyContent.localeCompare("Listening...") == 0) ? styles.hidden : styles.buttonIcon} size={100} icon="microphone" />
         </TouchableOpacity>
       </View>
 
@@ -66,17 +74,20 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#4F8C91',
-    height: 100,
-    width: 100,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonIcon: {
     backgroundColor: '#444444',
-    borderWidth: 5,
-    boarderRadium: 110,
+  },
+  buttonIconRecording: {
+    backgroundColor: '#444444',
+    borderWidth: 15,
     borderColor: '#A30000',
-  }
+  },
+  hidden: {
+    display: 'none',
+  },
 });
 
 export default MyComponent;
