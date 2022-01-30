@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Appbar, Button, Avatar } from 'react-native-paper';
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native-web";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
+import { summarizeText } from "./src/OpenAITest";
+import { Header } from "react-native/Libraries/NewAppScreen";
 
 const MyComponent = () => {
   const _goBack = () => console.log('Went back');
@@ -36,6 +38,8 @@ const MyComponent = () => {
       <View style={styles.body}>
         <Text style={styles.bodyText}>{bodyContent}</Text>
       </View>
+
+      {/* <Header>{summarizeText("why is the sky blue?", "The sky is blue because of raleigh scattering and because of the way light reflects and refracts through the air")}</Header> */}
 
       <View style={styles.buttonContent}>
         <TouchableOpacity style={styles.button} onPress={onPressMic}>
