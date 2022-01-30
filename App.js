@@ -3,6 +3,8 @@ import { Appbar, Button, Avatar } from 'react-native-paper';
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
+import { summarizeText } from './src/OpenAITest.js';
+import { doGoogleSearch, loadGoogleAPI } from "./src/googleSearch.js";
 import { startAudioRecording, stopAudioRecording } from "./audio";
 
 const MyComponent = () => {
@@ -29,8 +31,15 @@ const MyComponent = () => {
     }
   };
 
+  const outputGoogleResult = (r) => {
+    console.log("Found google results!");
+    console.log(r);
+  }
+
+  loadGoogleAPI();
+
   return (
-    <View style={styles.container}>
+    <View style={styles.container} id="content">
 
       <Appbar.Header style={styles.header}>
         <Appbar.Content title="Super Cool App" subtitle="It's pretty cool ngl.." />
