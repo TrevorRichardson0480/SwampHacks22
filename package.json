@@ -33,7 +33,8 @@
     "react-router-dom": "^6.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "dotenv": "^14.3.2"
   },
   "private": true
 }

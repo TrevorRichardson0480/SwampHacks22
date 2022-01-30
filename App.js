@@ -5,6 +5,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
 import { summarizeText } from './src/OpenAITest.js';
 import { GoogleSearch } from "./src/googleSearch.js";
+require('dotenv').config()
 
 const MyComponent = () => {
   const _goBack = () => console.log('Went back');
@@ -44,7 +45,8 @@ const MyComponent = () => {
         <Text style={styles.bodyText}>{bodyContent}</Text>
       </View>
 
-      {/* <Button onPress={() => {console.log("Done"); summarizeText("why is the sky blue?", "The sky is blue because of raleigh scattering and because of the way light reflects and refracts through the air"); }}>Try GPT-3</Button> */}
+      <Button onPress={() => {console.log("Done"); summarizeText("why is the sky blue?", "The sky is blue because of raleigh scattering and because of the way light reflects and refracts through the air"); }}>Try GPT-3</Button>
+      {/* <Button onPress={() => {console.log(process.env.REACT_APP_OPENAI_API_KEY)}}>Click for env import</Button> */}
 
       <View style={styles.buttonContent}>
         <TouchableOpacity style={styles.button} onPress={onPressMic}>

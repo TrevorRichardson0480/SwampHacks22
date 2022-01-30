@@ -4,7 +4,7 @@ export async function summarizeText(prompt, articleContent) {
 
     // Load your key from an environment variable or secret management service
     // (do not include your key directly in your code)
-    const OPENAI_API_KEY = "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";
+    const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
     const openai = new OpenAI(OPENAI_API_KEY);
 

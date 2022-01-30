@@ -77,8 +77,8 @@ export function GoogleSearch(queryString, callbackFromSearch) {
 
     // Client ID and API key from the Developer Console
     // const CLIENT_ID = '352950743618-as40op9vf6rih4v3qbts99o4aaer82q2.apps.googleusercontent.com';
-    const CLIENT_ID = '352950743618-ubtd7o0i8kfms6gjuj34mbj77u79241p.apps.googleusercontent.com';
-    const API_KEY = 'AIzaSyAZZmaHv8HoXI-e6JLfIUuOwaVtOc1JjrM';
+    const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const API_KEY = process.env.REACT_APP_GOOGLE_CSE_API_KEY;
     // var CLIENT_ID = credentials["google-search-client-id"];
     // var API_KEY = credentials["google-search-api-key"];
 
@@ -99,7 +99,7 @@ export function GoogleSearch(queryString, callbackFromSearch) {
         let links = [];
 
         window.gapi.client.search.cse.list({
-            "cx": "0dfb04d39744dc5c1",
+            "cx": process.env.REACT_APP_GOOGLE_CX,
             "q": queryString
         })
             .then(function (response) {
