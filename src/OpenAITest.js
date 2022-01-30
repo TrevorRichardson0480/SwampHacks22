@@ -4,15 +4,15 @@ export async function summarizeText(prompt, articleContent) {
 
     // Load your key from an environment variable or secret management service
     // (do not include your key directly in your code)
-    const OPENAI_API_KEY = "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";
+    const OPENAI_API_KEY = "";
 
     const openai = new OpenAI(OPENAI_API_KEY);
 
-    console.log("Running gpt-3...");
+    // console.log("Running gpt-3...");
 
     let gptResponse = "";
 
-    console.log("Before await");
+    // console.log("Before await");
     gptResponse = await openai.complete({
         engine: 'davinci',
         prompt: `${prompt} ${articleContent} Let me summarize: `,
@@ -27,11 +27,16 @@ export async function summarizeText(prompt, articleContent) {
         stop: ['\n']
     });
 
-    console.log("After await");
-    console.log(gptResponse.data);
+    // console.log("After await");
+    // console.log(gptResponse.data);
     console.log(gptResponse.data["choices"][0]["text"]);
 
-    return gptResponse.data["choices"][0]["text"];
+    let summary = gptResponse.data["choices"][0]["text"];
+
+    let summaryTextElem = document.getElementById("summaryText");
+    summaryTextElem.innerHTML = summary;
+
+    return summary;
 
     // return gptResponse;
 }

@@ -56,6 +56,11 @@ const MyComponent = () => {
         </TouchableOpacity>
       </View>
 
+      {/* <Button onPress={() => {summarizeText("Why is the sky blue?", "The sky is blue because of the way light scatters through the atmosphere")}}>Try OpenAI</Button> */}
+      {/* Uncomment this ^^^ to test the OpenAI summarizer using a button */}
+
+      <p id="summaryText">Summary will appear here</p>
+
     </View>
   );
 };
