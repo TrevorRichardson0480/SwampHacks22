@@ -5,7 +5,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
 import { summarizeText } from './src/OpenAITest.js';
 import { doGoogleSearch, loadGoogleAPI } from "./src/googleSearch.js";
-require('dotenv').config()
+import { startAudioRecording, stopAudioRecording } from "./audio";
 
 const MyComponent = () => {
   const _goBack = () => console.log('Went back');
@@ -19,10 +19,12 @@ const MyComponent = () => {
       // enter a listening state
       setContent("Listening...");
       // start listening
+      startAudioRecording();
 
     } else {
       // enter a processing state
       setContent("Wait...");
+      stopAudioRecording();
       // stop listening
       // ...
       // setContent(content);

@@ -1,42 +1,38 @@
  /** Starts the audio recording*/
- export function startAudioRecording() {
-    console.log('okay now we are starting')
+let globalMediaRecorder;
+export function startAudioRecording() {
 
     // get access first and create a stream 
     navigator.mediaDevices.getUserMedia({
             audio: true
         })
+        // resolve by passing a stream into mediarecorder object
         .then(stream => {
-            const mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.start(100);
+            globalMediaRecorder = new MediaRecorder(stream);
+            globalMediaRecorder.start(100)
+            // return mediarecorder so that we can access in stopaudiorecording function
 
-            // we will need to store the audio continuously 
-            const userQuestion = [];
-            // when data is available, lets add it to chunks
-            mediaRecorder.addEventListener("dataavailable", event => {
-                userQuestion.push(event.data);
-            });
 
-            // after we stop lets store the chunks in a blob
-            // create a url out of the blob 
-            // play it back to the user 
-            mediaRecorder.addEventListener("stop", () => {
-                const blob = new Blob(userQuestion);
-                const audioUrl = URL.createObjectURL(blob);
-                const audio = new Audio(audioUrl);
-                audio.play();
+             // we will need to store the audio continuously 
+             const userQuestion = [];
+             // when data is available, lets add it to chunks
+             globalMediaRecorder.addEventListener("dataavailable", event => {
+                 userQuestion.push(event.data);
+             });
+         
+             // after we stop lets store the chunks in a blob
+             // create a url out of the blob 
+             // play it back to the user 
+             globalMediaRecorder.addEventListener("stop", () => {
+                 const blob = new Blob(userQuestion);
+                 const audioUrl = URL.createObjectURL(blob);
+                 const audio = new Audio(audioUrl);
+                 audio.play();
+                 // yo javier 
 
-            });
-            // use setTimeout to stop the recording after specified time 
-            setTimeout(() => {
-                console.log("3 seconds have passed")
-                mediaRecorder.stop();
-            }, 12000);
-
-        });
+             });       
+        })    
+    }
+export function stopAudioRecording(){
+    globalMediaRecorder.stop();
 }
-
-// next task is to figure out when to start and stop recording
-// be able to store the recording as it happens and finish storing whenever we .stop()
-// .requestData
-// we also need to not start recording as soon as we enter the site 1n3g
