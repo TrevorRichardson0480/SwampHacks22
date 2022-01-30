@@ -1,12 +1,12 @@
 // Imports the Google Cloud client library
-const speech = require("@google-cloud/speech");
-const fs = require("fs");
+// const speech = require("@google-cloud/speech");
+// const fs = require("fs");
 
-// Creates a client
-const client = new speech.SpeechClient();
+// // Creates a client
+// const client = new speech.SpeechClient();
 
 // Convert speech to text
-async function convertSpeechToText(audio_) {
+export async function convertSpeechToText(audio_) {
   // The path to the remote LINEAR16 file
   const audioData = audio_;
 
@@ -34,4 +34,4 @@ async function convertSpeechToText(audio_) {
   return transcription;
 }
 
-convertSpeechToText("audio.wav");
+//convertSpeechToText("audio.wav");

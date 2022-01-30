@@ -1,46 +1,24 @@
-// Import the puppeteer library
-const puppeteer = require("puppeteer");
+// Import library
+const fetch = require("node-fetch");
+const cheerio = require("cheerio");
 
-export async function webScraper(url) {
-  const browser = await puppeteer.launch(); // Launch browser
-  const page = await browser.newPage(); // Open new tab
-  await page.goto(url); // Got to the url
+// Web scraping website
+export async function webScraping(url) {
+  const searchUrl = url; // Webiste url
+  const response = await fetch(searchUrl); // fetch page (html)
 
-  // Get http reuqest response
-  const responseStatus = await page.waitForResponse((response) => {
-    return response;
+  const htmlString = await response.text(); // get response text
+  const $ = cheerio.load(htmlString); // parse HTML string
+
+  // Get paragraphs data
+  const paragraphs = $("p").text().split("\n");
+  const finalData = [];
+  paragraphs.forEach((p) => {
+    if (p.length >= 700) {
+      finalData.push(p);
+    }
   });
 
-  if (responseStatus.status() == 200) {
-    // Get all the paragraphs from the website
-    const getParagraphs = await page.evaluate(() => {
-      const paragraphTag = document.querySelectorAll("p"); // Get all p tags
-      const paragraphArr = []; // Store the paragraghs text
-
-      // Go through each p tag and push the text to the array
-      paragraphTag.forEach((p) => {
-        if (p.innerText.length >= 700) paragraphArr.push(p.innerText);
-      });
-
-      // Return paragraphs array
-      return paragraphArr.join("\n");
-    });
-
-    // Check if the array is empty or not
-    if (getParagraphs.length > 0) {
-      console.log(getParagraphs);
-
-      // Close browser
-      await browser.close();
-
-      // Return data
-      return getParagraphs;
-    } else {
-      throw new Error("Array empty");
-    }
-  } else {
-    throw new Error(`Error! HTTP request status is ${responseStatus.status()}`);
-  }
+  // Return data
+  return finalData.join("\n");
 }
-
-webScraper("https://en.wikipedia.org/wiki/University_of_Florida");

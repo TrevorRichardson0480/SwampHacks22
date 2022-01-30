@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Appbar, Button, Avatar } from 'react-native-paper';
+import { Appbar, Button, Avatar } from "react-native-paper";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
+import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
+//import { webScraper } from "./src/webScraping";
+import { convertSpeechToText } from "./src/speechToText";
 
 const MyComponent = () => {
-  const _goBack = () => console.log('Went back');
-  const _handleSearch = () => console.log('Searching');
-  const _handleMore = () => console.log('Shown more');
+  const _goBack = () => console.log("Went back");
+  const _handleSearch = () => console.log("Searching");
+  const _handleMore = () => console.log("Shown more");
 
   const [bodyContent, setContent] = useState("Say something...");
 
@@ -16,7 +18,6 @@ const MyComponent = () => {
       // enter a listening state
       setContent("Listening...");
       // start listening
-
     } else {
       // enter a processing state
       setContent("Wait...");
@@ -26,11 +27,15 @@ const MyComponent = () => {
     }
   };
 
+  //webScraper("https://en.wikipedia.org/wiki/University_of_Florida");
+  //convertSpeechToText("audio.wav");
   return (
     <View style={styles.container}>
-
       <Appbar.Header style={styles.header}>
-        <Appbar.Content title="Super Cool App" subtitle="It's pretty cool ngl.." />
+        <Appbar.Content
+          title="Super Cool App"
+          subtitle="It's pretty cool ngl.."
+        />
       </Appbar.Header>
 
       <View style={styles.body}>
@@ -39,11 +44,26 @@ const MyComponent = () => {
 
       <View style={styles.buttonContent}>
         <TouchableOpacity style={styles.button} onPress={onPressMic}>
-          <Avatar.Icon style={(bodyContent.localeCompare("Listening...") == 0) ? styles.buttonIconRecording : styles.hidden} size={130} icon="microphone" />
-          <Avatar.Icon style={(bodyContent.localeCompare("Listening...") == 0) ? styles.hidden : styles.buttonIcon} size={100} icon="microphone" />
+          <Avatar.Icon
+            style={
+              bodyContent.localeCompare("Listening...") == 0
+                ? styles.buttonIconRecording
+                : styles.hidden
+            }
+            size={130}
+            icon="microphone"
+          />
+          <Avatar.Icon
+            style={
+              bodyContent.localeCompare("Listening...") == 0
+                ? styles.hidden
+                : styles.buttonIcon
+            }
+            size={100}
+            icon="microphone"
+          />
         </TouchableOpacity>
       </View>
-
     </View>
   );
 };
@@ -51,11 +71,11 @@ const MyComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#4F8C91',
+    backgroundColor: "#4F8C91",
   },
   header: {
     flex: 1,
-    backgroundColor: '#033E43',
+    backgroundColor: "#033E43",
   },
 
   body: {
@@ -69,24 +89,24 @@ const styles = StyleSheet.create({
 
   buttonContent: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   button: {
-    backgroundColor: '#4F8C91',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#4F8C91",
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonIcon: {
-    backgroundColor: '#444444',
+    backgroundColor: "#444444",
   },
   buttonIconRecording: {
-    backgroundColor: '#444444',
+    backgroundColor: "#444444",
     borderWidth: 15,
-    borderColor: '#A30000',
+    borderColor: "#A30000",
   },
   hidden: {
-    display: 'none',
+    display: "none",
   },
 });
 
