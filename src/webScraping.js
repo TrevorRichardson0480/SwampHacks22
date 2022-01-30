@@ -1,7 +1,7 @@
 // Import the puppeteer library
 const puppeteer = require("puppeteer");
 
-async function webScraper(url) {
+export async function webScraper(url) {
   const browser = await puppeteer.launch(); // Launch browser
   const page = await browser.newPage(); // Open new tab
   await page.goto(url); // Got to the url
