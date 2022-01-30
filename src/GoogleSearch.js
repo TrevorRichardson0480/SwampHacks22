@@ -12,20 +12,66 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
-import Button from 'react-bootstrap/Button';
 
-export function GoogleSearch(props) {
-    const [loaded, setLoaded] = useState(false);
-    
-    useEffect(() => {
-      loadGAPI(() => {
-        setLoaded(true);
+export function GoogleSearch(queryString, callbackFromSearch) {
+
+    /**
+     *  Initializes the API client library and sets up sign-in state
+     *  listeners.
+     */
+     const initClient = () => {
+        console.log("Initializing client...");
+
+        gapi.client.init({
+            apiKey: API_KEY,
+            clientId: CLIENT_ID,
+            discoveryDocs: DISCOVERY_DOCS,
+            scope: SCOPES
+        }).then(function () {
+            console.log("Setting handlers...");
+
+            // Listen for sign-in state changes.
+            // gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+            // Handle the initial sign-in state.
+            // updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+            // authorizeButton.onclick = handleAuthClick;
+            // signoutButton.onclick = handleSignoutClick;
+            console.log("Sign in should be here");
+            performGoogleSearch();
+        }, function (error) {
+            appendPre(JSON.stringify(error, null, 2));
+        });
+    }
+
+    const loadGAPI = (callback) => {
+        const existingScript = document.getElementById('gapi-script');
+        if (!existingScript) {
+            const script = document.createElement('script');
+            script.src = 'https://apis.google.com/js/api.js';
+            script.id = 'gapi-script';
+            document.body.appendChild(script);
+            script.onload = () => {
+                if (callback) callback();
+            };
+        }
+        if (existingScript && callback) callback();
+    };
+
+    /**
+   *  On load, called to load the auth2 library and API client library.
+   */
+    const handleClientLoad = () => {
+        console.log("handleClientLoad called");
+        console.log(gapi);
+        gapi.load('client:auth2', initClient);
+    }
+
+    loadGAPI(() => {
         console.log("GAPI loaded");
         handleClientLoad();
-      });
     });
-  
+
 
     const [authorized, setAuthorized] = React.useState(false);
 
@@ -47,40 +93,33 @@ export function GoogleSearch(props) {
     const signoutButton = document.getElementById('signout_button');
 
     /**
-     *  On load, called to load the auth2 library and API client library.
+     * Print the display name if available for 10 connections.
      */
-    const handleClientLoad = () => {
-        console.log("handleClientLoad called");
-        console.log(gapi);
-        gapi.load('client:auth2', initClient);
+    const performGoogleSearch = async () => {
+        let links = [];
+
+        window.gapi.client.search.cse.list({
+            "cx": "0dfb04d39744dc5c1",
+            "q": queryString
+        })
+            .then(function (response) {
+                // Handle the results here (response.result has the parsed body).
+                console.log("Response", response);
+                console.log(response["result"]["items"][0]["link"]);
+                console.log(response["result"]["items"][0]["snippet"]);
+
+                for (let i = 0; i < 10; i++) {
+                    links.push(response["result"]["items"][i]["link"])
+                }
+                console.log(links);
+                callbackFromSearch(links);
+            },
+                function (err) { console.error("Execute error", err); });
+
+        return links;
     }
 
-    /**
-     *  Initializes the API client library and sets up sign-in state
-     *  listeners.
-     */
-    const initClient = () => {
-        console.log("Initializing client...");
-        gapi.client.init({
-            apiKey: API_KEY,
-            clientId: CLIENT_ID,
-            discoveryDocs: DISCOVERY_DOCS,
-            scope: SCOPES
-        }).then(function () {
-            console.log("Setting handlers...");
 
-            // Listen for sign-in state changes.
-            // gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-            // Handle the initial sign-in state.
-            // updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-            // authorizeButton.onclick = handleAuthClick;
-            // signoutButton.onclick = handleSignoutClick;
-            console.log("Sign in should be here");
-        }, function (error) {
-            appendPre(JSON.stringify(error, null, 2));
-        });
-    }
 
     /**
      *  Called when the signed in status changes, to update the UI
@@ -126,53 +165,7 @@ export function GoogleSearch(props) {
         pre.appendChild(textContent);
     }
 
-    /**
-     * Print the display name if available for 10 connections.
-     */
-    const performGoogleSearch = (queryString) => {
-        return window.gapi.client.search.cse.list({
-            "cx": "0dfb04d39744dc5c1",
-            "q": queryString
-        })
-            .then(function (response) {
-                // Handle the results here (response.result has the parsed body).
-                console.log("Response", response);
-                console.log(response["result"]["items"][0]["link"]);
-                console.log(response["result"]["items"][0]["snippet"]);
-
-                let links = [];
-                for (let i = 0; i < 10; i++) {
-                    links.push(response["result"]["items"][i]["link"])
-                }
-                console.log(links);
-                return links;
-            },
-                function (err) { console.error("Execute error", err); });
-    }
-
-    const loadGAPI = (callback) => {
-        const existingScript = document.getElementById('gapi-script');
-        if (!existingScript) {
-          const script = document.createElement('script');
-          script.src = 'https://apis.google.com/js/api.js';
-          script.id = 'gapi-script';
-          document.body.appendChild(script);
-          script.onload = () => { 
-            if (callback) callback();
-          };
-        }
-        if (existingScript && callback) callback();
-      };
-
     return (
-        <div id="content">
-            {/* <Helmet>
-                <script id='gapi-script' src="https://apis.google.com/js/api.js" />
-            </Helmet> */}
-            {/* <Button onClick={handleClientLoad} className="btn">Load Google API</Button> */}
-            {/* <Button onClick={() => {performGoogleSearch("Why is the sky blue?")}} className="btn">Run google search</Button> */}
-            {/* <Button id="authorize_button" style={authorized ? { display: "none" } : { display: "block" }} onClick={handleAuthClick}>Authorize</Button> */}
-            {/* <Button id="signout_button" style={!authorized ? {display: "none"} : {display: "block"}} onClick={handleSignoutClick}>Sign out</Button> */}
-        </div>
+        performGoogleSearch
     );
 }
