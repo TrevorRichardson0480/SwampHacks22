@@ -4,7 +4,7 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
 import { summarizeText } from './src/OpenAITest.js';
-import { GoogleSearch } from "./src/googleSearch.js";
+import { doGoogleSearch, loadGoogleAPI } from "./src/googleSearch.js";
 require('dotenv').config()
 
 const MyComponent = () => {
@@ -34,8 +34,10 @@ const MyComponent = () => {
     console.log(r);
   }
 
+  loadGoogleAPI();
+
   return (
-    <View style={styles.container}>
+    <View style={styles.container} id="content">
 
       <Appbar.Header style={styles.header}>
         <Appbar.Content title="Super Cool App" subtitle="It's pretty cool ngl.." />
@@ -44,9 +46,6 @@ const MyComponent = () => {
       <View style={styles.body}>
         <Text style={styles.bodyText}>{bodyContent}</Text>
       </View>
-
-      <Button onPress={() => {console.log("Done"); summarizeText("why is the sky blue?", "The sky is blue because of raleigh scattering and because of the way light reflects and refracts through the air"); }}>Try GPT-3</Button>
-      {/* <Button onPress={() => {console.log(process.env.REACT_APP_OPENAI_API_KEY)}}>Click for env import</Button> */}
 
       <View style={styles.buttonContent}>
         <TouchableOpacity style={styles.button} onPress={onPressMic}>
