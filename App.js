@@ -3,6 +3,7 @@ import { Appbar, Button, Avatar } from 'react-native-paper';
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
+import { startAudioRecording, stopAudioRecording } from "./audio";
 
 const MyComponent = () => {
   const _goBack = () => console.log('Went back');
@@ -16,10 +17,12 @@ const MyComponent = () => {
       // enter a listening state
       setContent("Listening...");
       // start listening
+      startAudioRecording();
 
     } else {
       // enter a processing state
       setContent("Wait...");
+      stopAudioRecording();
       // stop listening
       // ...
       // setContent(content);
